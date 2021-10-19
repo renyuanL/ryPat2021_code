@@ -15,7 +15,7 @@ from IPython.display import display, Math
 
 #%matplotlib qt
 #%matplotlib inline
-sm.init_printing()
+init_printing(use_unicode=True)
 #%%
 π= sm.pi
 
