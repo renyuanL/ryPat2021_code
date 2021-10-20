@@ -197,9 +197,42 @@ ryPlot(df_dx,x,-10,10)
 mgrid= np.mgrid[0:10,0:10]
 ogrid= np.ogrid[0:10,0:10]
 #%%
+# Solve the differential equation y" − y = e^t.
+
+f= sm.Function('f')
+解= sm.dsolve(
+    sm.Eq(
+        f(t).diff(t, t) - f(t), 
+        sm.exp(t)), 
+    f(t))
+
+#%%
+q= 解.rhs.as_expr(
+    ).subs({"C1":10, "C2":20})
+
+#%%
+# with initial conditions
+# y(0) = 0
+# y'(0)=10
+
+y= 解.rhs.as_expr()
+
+eq1= sm.Eq(y.subs(t,0),0)
+eq2= sm.Eq(y.diff(t).subs(t,0),10)
 
 
+#C1, C2= sm.symbols('C1, C2')
 
+q= sm.solve(
+  [eq1, eq2],
+  #sm.symbols('C1, C2')
+  'C1','C2'
+  )
+
+#%%
+x= sm.Symbol('x')
+
+#%%
 
 
 
