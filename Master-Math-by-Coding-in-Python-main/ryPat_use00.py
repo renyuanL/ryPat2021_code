@@ -198,7 +198,7 @@ mgrid= np.mgrid[0:10,0:10]
 ogrid= np.ogrid[0:10,0:10]
 #%%
 # Solve the differential equation y" − y = e^t.
-
+#
 f= sm.Function('f')
 解= sm.dsolve(
     sm.Eq(
@@ -225,7 +225,6 @@ eq2= sm.Eq(y.diff(t).subs(t,0),10)
 
 q= sm.solve(
   [eq1, eq2],
-  #sm.symbols('C1, C2')
   'C1','C2'
   )
 
