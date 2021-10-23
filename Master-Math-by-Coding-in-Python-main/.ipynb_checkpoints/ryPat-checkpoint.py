@@ -94,6 +94,91 @@ def ryGradient_demo(z=None):
               length= 1/np.max([u,v]), 
               color = 'gray')
 
+
+kwargs={'xlabel': 'x', 'ylabel': 'y'}
+    
+def ryPlot3d_ver0_(z, xrange=(-3,+3), yrange=(-3,+3), kwargs= None):
+    
+    if kwargs == None:
+        kwargs={'xlabel': 'x', 'ylabel': 'y'}
+    
+    xmin, xmax= xrange
+    ymin, ymax= yrange
+    
+    xm,ym= np.meshgrid(
+        np.linspace(xmin,xmax,101),
+        np.linspace(ymin,ymax,101)
+    )
+    zm= sm.lambdify((x,y),z)(xm,ym)
+
+    fg= pl.figure()
+    ax= pl.axes(projection='3d',
+                title= f'z= ${sm.latex(z)}$',
+                **kwargs)
+    ax.contour3D(xm, ym, zm, 100,
+                 cmap= 'rainbow')
+    return fg, ax    
+    
+# 進入真正的深水區
+# 運用 ax.quiver() 結合 Gradient Vector ，
+# 把 2D 函數 的梯度圖畫出。
+
+def ryPlot3d(z, xrange=(-3,+3), yrange=(-3,+3), kwargs= None):
+    
+    if kwargs == None:
+        kwargs={'xlabel': 'x', 'ylabel': 'y'}
+    
+    xmin, xmax= xrange
+    ymin, ymax= yrange
+    
+    xrange= np.linspace(xmin,xmax,101)
+    yrange= np.linspace(ymin,ymax,101)
+    xm,ym=  np.meshgrid(xrange,yrange)
+    
+    zm= sm.lambdify((x,y),z)(xm,ym)
+
+    fg= pl.figure()
+    ax= pl.axes(projection='3d',
+                title= f'z= ${sm.latex(z)}$',
+                **kwargs)
+    ax.contour3D(xm, ym, zm, 100,
+                 cmap= 'rainbow')
+    return fg, ax, zm, xrange, yrange
+
+def ryPlotGradientMap(z,
+                      xrange=(-3,+3), 
+                      yrange=(-3,+3),
+                      downSampleFactor= 4, 
+                      lengthFactor= .1):
+    
+    fg, ax, zm, xrange, yrange=  ryPlot3d(z, 
+                                          xrange= xrange, 
+                                          yrange=yrange)
+    
+    z10= z.diff(x,1,y,0)
+    z01= z.diff(x,0,y,1)
+
+    #downSampleFactor= 2
+    xm, ym, zm0= np.meshgrid(
+        xrange[::downSampleFactor],
+        yrange[::downSampleFactor],
+        np.linspace(np.min(zm), np.min(zm)+1, 1)
+        )
+
+    #dz_dx= 2*x0
+    #dz_dy= 2*y0
+
+    dz_dx_m= sm.lambdify((x,y),z10)(xm,ym)
+    dz_dy_m= sm.lambdify((x,y),z01)(xm,ym)
+
+    u= dz_dx_m
+    v= dz_dy_m
+    w= np.zeros_like(xm)
+    ax.quiver(xm, ym, zm0, 
+              u, v, w, 
+              length= lengthFactor, #*np.max([u,v]), 
+              color = 'gray')    
+
 if __name__=='__main__':
     ryGradient_demo()
     
