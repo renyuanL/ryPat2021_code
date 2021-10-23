@@ -180,5 +180,9 @@ def ryPlotGradientMap(z,
               color = 'gray')    
 
 if __name__=='__main__':
+    
     ryGradient_demo()
+    
+    z= sm.exp(-(x**2+y**2))
+    ryPlotGradientMap(z)
     
