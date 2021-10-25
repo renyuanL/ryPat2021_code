@@ -179,6 +179,100 @@ def ryPlotGradientMap(z,
               length= lengthFactor, #*np.max([u,v]), 
               color = 'gray')    
 
+
+# 封裝測試一下...，允許輸入不同函數
+# 加碼練習 subplot()
+# 加碼觀察 cumsum()
+
+def ryHistogram_demo(func= None):
+    
+    # 在時間軸上 不同的訊號，
+    # 使用 np.histogram() 把它們視為相同的機率分布！
+    t= np.linspace(-10,10,1001)
+    #t= np.arange(-10,10)
+    
+    if func==None:
+        func= np.sin
+        
+    X= func(t) #t**2
+    
+    X1= np.sort(X)
+    X2= X.copy()
+    np.random.shuffle(X2)  # 這個 .shuffle() 每次結果都不同！！
+    
+    
+    # 針對離散型，也許 nbins 要精細一點計算
+    nbins= len(set(X))
+    nbins= min(nbins, 20)
+    
+    f, x= np.histogram(X, bins= nbins)
+    f= np.insert(f,0,0)  
+    # 上面這一行是 ry 特殊補丁，
+    # .histogram() 做出的 f, x 長度不同，影響後面程式碼的簡潔！
+    f1, x1= np.histogram(X1, bins= nbins)
+    f1= np.insert(f1,0,0)  
+    f2, x2= np.histogram(X2, bins= nbins)
+    f2= np.insert(f2,0,0)
+    t, X, X1, X2
+    x, f, x1, f1, x2, f2
+    
+    # 加碼觀察 cumsum
+    F= np.cumsum(f)
+    
+    #fg1= pl.figure('fg1')
+    #ax= pl.axes()
+    
+    fg, ax = plt.subplots(2,2,figsize=(10,5))
+    
+    ax[0,0].plot(t,X,'ro',t,X1,'gx',t,X2,'b.')
+    ax[0,0].set_xlabel('t')
+    ax[0,0].set_ylabel('X, X1, X2')
+    ax[0,0].legend(['X','X1','X2'])
+    
+    #'''
+    #fg2= pl.figure('fg2')
+    #ax2= pl.axes()
+    ax[0,1].plot(f,x,'ro--',f1,x1,'gx-.',f2,x2,'b.-',F,x,'cs--')
+    ax[0,1].set_xlabel('f, f1, f2, F')
+    ax[0,1].set_ylabel('x')
+    ax[0,1].legend(['f','f1','f2','F'])
+    #'''
+    #fg3= pl.figure('fg3')
+    #ax3= pl.axes()
+    ax[1,0].plot(x,f,'ro--',x1,f1,'gx-',x2,f2,'b.-', x,F,'cs--')
+    ax[1,0].set_ylabel('f, f1, f2, F')
+    ax[1,0].set_xlabel('x')
+    ax[1,0].legend(['f','f1','f2','F'])
+    
+    # 加碼觀察 cumsum
+    # 本想簡單達成
+    # 但 加 legend() 出問題，只好把以下幾行混進上面程式碼中，殘念！！！
+    
+    '''
+    F= np.cumsum(f)
+
+    ax[1,0].plot(x,F,'cs-')
+    #ax[1,0].legend(['F'])
+
+    ax[0,1].plot(F,x,'cs-')
+    #ax[0,1].legend(['F'])
+    '''
+ 
+    
+
 if __name__=='__main__':
-    ryGradient_demo()
+    
+    #ryGradient_demo()
+    
+    #z= sm.exp(-(x**2+y**2))
+    #ryPlotGradientMap(z)
+    
+    def f(t): 
+        #y= np.sin(t)
+        #y= np.random.random(size= len(t))
+        y= np.random.normal(size= len(t))
+        
+        return y
+
+    ryHistogram_demo(f)
     
