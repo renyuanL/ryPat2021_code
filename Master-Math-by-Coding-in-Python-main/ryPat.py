@@ -259,7 +259,72 @@ def ryHistogram_demo(func= None):
     '''
  
     
+def ryDistribution_demo(distributionType= 'normal', sampleSize= 1000):
+    
+    #sampleSize= 1000
 
+    t= np.arange(sampleSize)
+    
+    if distributionType in ['normal','gauss','gaussian']:
+        X= np.random.normal(size= sampleSize)
+    elif distributionType == 'uniform':
+        X= np.random.uniform(0,10, size= sampleSize)
+    elif distributionType == 'binomial':
+        X= np.random.binomial(n=10, p=.5, size= sampleSize)
+    elif distributionType == 'poisson':
+        X= np.random.poisson(lam=5, size= sampleSize)
+    elif distributionType == 'uniform_d':
+        X= np.random.randint(low= 0, high= 10, size= sampleSize)
+    else: # 以上皆非時，以下 sin() 取代
+        X= np.sin(t/sampleSize*2*np.pi)
+        X += np.sin(t/sampleSize*2*np.pi *2)
+        X += np.sin(t/sampleSize*2*np.pi *3)
+        
+    #X= X*X
+
+    fig,ax = plt.subplots(3, 1,figsize=(6,3))
+    ax[0].plot(t,X,'r.',alpha=.5)
+
+    X1= X.copy()
+    X1.sort()
+
+    ax[0].plot(t,X1,'g.',alpha=.3)
+
+    ax[0].set_xlabel('t')
+    ax[0].set_ylabel('X')
+    ax[0].legend(['X','X1= X.sort()'])
+    ax[0].set_title(f'{distributionType}, X= X(t)')
+
+    ax[1].plot(X,t,'r.',alpha=.5)
+    ax[1].plot(X1,t,'g.',alpha=.3)
+
+    ax[1].set_xlabel('X')
+    ax[1].set_ylabel('t')
+    ax[1].legend(['X','X1= X.sort()'])
+    ax[1].set_title('$t= t(X)=X^{-1}(X(t))$, t in vertical, X in horizontal')
+
+    # 針對離散型，也許 nbins 要精細一點計算
+    nbins= len(set(X))
+    nbins= min(nbins, 20)
+    
+    f, x= np.histogram(X, bins= nbins)
+    x= x[:-1] # 原本的 x 比 f 多 1 點，故在此把它弄掉
+    
+    xwidth=  (X.max()-X.min())/nbins/2
+    
+    ax[2].bar(x, f, width= xwidth, color='r', alpha=.5)
+
+    F= f.cumsum()
+    ax[2].bar(x, F, width= xwidth, color= 'g', alpha=.3)
+
+    ax[2].set_xlabel('x')
+    ax[2].set_ylabel('f, F')
+    ax[2].legend(['f','F= f.cumsum()'])
+    ax[2].set_title('f= histogram(X)= f(x)')
+
+
+    plt.show()
+    
 if __name__=='__main__':
     
     #ryGradient_demo()
@@ -275,4 +340,6 @@ if __name__=='__main__':
         return y
 
     ryHistogram_demo(f)
+    
+    ryDistribution_demo('normal')
     
