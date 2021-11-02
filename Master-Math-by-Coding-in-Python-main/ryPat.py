@@ -9,9 +9,13 @@ import matplotlib.pyplot as pl
 import matplotlib.pyplot as plt
 
 import seaborn as sb
-sb.set_style('whitegrid')
+#sb.set_style('whitegrid')
+sb.set_theme()
 
 from IPython.display import display, Math
+
+import scipy.stats as st
+import scipy.special as sc
 
 #%matplotlib qt
 #%matplotlib inline
@@ -21,6 +25,22 @@ sm.init_printing(use_unicode=True)
 
 #%%
 
+ryColorMap=[
+    'red', 
+    'orange', 
+    'yellow', 
+    'green',
+    'cyan',
+    'blue',
+    'purple',
+    'magenta',
+    'gray',
+    'black']
+    
+pl.rcParams['axes.prop_cycle']= pl.cycler(
+    color= ryColorMap)
+
+#%%
 def ryGradient_demo(z=None):
     '''
     input: z= f(x,y)
@@ -325,6 +345,22 @@ def ryDistribution_demo(distributionType= 'normal', sampleSize= 1000):
 
     plt.show()
     
+
+def ryGetAttr(className):
+    q= className
+    for n, x in enumerate(dir(q)): 
+        if not x.startswith('_'):
+            y= getattr(q, x)
+            z= y.__doc__
+            print(f'''
+            {'='*40}
+            n= {n}
+            x= {x}
+            y= {y}
+            {'-'*40}
+            z= {z}
+            ''')
+
 if __name__=='__main__':
     
     #ryGradient_demo()
