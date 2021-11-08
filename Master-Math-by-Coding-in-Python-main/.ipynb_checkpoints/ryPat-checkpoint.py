@@ -8,6 +8,8 @@ from   sympy.abc import *
 import matplotlib.pyplot as pl
 import matplotlib.pyplot as plt
 
+from   mpl_toolkits import mplot3d
+
 import seaborn as sb
 #sb.set_style('whitegrid')
 sb.set_theme()
@@ -197,7 +199,9 @@ def ryPlotGradientMap(z,
     ax.quiver(xm, ym, zm0, 
               u, v, w, 
               length= lengthFactor, #*np.max([u,v]), 
-              color = 'gray')    
+              color = 'gray')
+    
+    return fg, ax
 
 
 # 封裝測試一下...，允許輸入不同函數
