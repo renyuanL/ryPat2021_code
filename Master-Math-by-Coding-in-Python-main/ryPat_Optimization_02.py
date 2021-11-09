@@ -14,9 +14,9 @@ constraints 夾出一個 凸型區域，我把它塗成灰色，
 
 from ryPat import *
 
-#from ryPat_Optimization_01 import *
+from ryPat_Optimization_01 import *
 
-#%matplotlib qt
+#%matplotlib qt # 若你使用 jupyter，這一行應在jupyter 的碼細胞格(code cell)中執行
 
 #f([x,y])
 
@@ -31,10 +31,8 @@ from ryPat import *
 def f(s):
     x, y= s
     
-    z=  (x-5)**2 + ((y+5)/3)**2
-    #z += (x-5)*(y+5)
-    #z= -2**(-z/25)
-    
+    x0,y0= (8, 1)    
+    z=  (x-x0)**2 + ((y-y0)/3)**2 
     
     return z
 
@@ -72,7 +70,9 @@ xyBounds= [(-5, 5),  # xmin, xmax
            (-5, 5)   # ymin, ymax
            ]
 
-#ryOptimization(f,c1,c2,c3, xyBounds)
+ryOptimization(f,c1,c2,c3, xyBounds)
+
+pl.figure()
 
 '''
 def ryOptimization(
@@ -282,3 +282,4 @@ ax.text(
     s= infoStr
 )
 
+pl.show()
