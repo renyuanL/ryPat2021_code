@@ -1,0 +1,11 @@
+# MAC OS
+.DS_Store
+
+# ipynb_checkpoints
+.ipynb_checkpoints
+
+# result files
+*.png
+*.jpg
+*.mp4
+*.gif
